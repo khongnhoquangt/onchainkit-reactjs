@@ -1,0 +1,48 @@
+import { jsxDEV } from "react/jsx-dev-runtime";
+import { Component } from "react";
+import { sendAnalyticsPayload } from "./core/analytics/utils/analyticsService.js";
+import { ErrorEvent } from "./core/analytics/types.js";
+class OnchainKitProviderBoundary extends Component {
+  constructor() {
+    super(...arguments);
+    this.state = {
+      error: null
+    };
+  }
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("Uncaught error:", error, errorInfo);
+    sendAnalyticsPayload(ErrorEvent.ComponentError, {
+      component: "OnchainKitProviderBoundary",
+      error: error.message,
+      metadata: {
+        message: error.message,
+        stack: errorInfo.componentStack
+      }
+    });
+  }
+  render() {
+    if (this.state.error) {
+      if (this.props.fallback) {
+        const Fallback = this.props.fallback;
+        return /* @__PURE__ */ jsxDEV(Fallback, { error: this.state.error }, void 0, false, {
+          fileName: "/Users/MAC/Documents/Code/onchainkit-react/src/OnchainKitProviderBoundary.tsx",
+          lineNumber: 45,
+          columnNumber: 16
+        }, this);
+      }
+      return /* @__PURE__ */ jsxDEV("h1", { children: "Sorry, we had an unhandled error" }, void 0, false, {
+        fileName: "/Users/MAC/Documents/Code/onchainkit-react/src/OnchainKitProviderBoundary.tsx",
+        lineNumber: 47,
+        columnNumber: 14
+      }, this);
+    }
+    return this.props.children;
+  }
+}
+export {
+  OnchainKitProviderBoundary as default
+};
+//# sourceMappingURL=OnchainKitProviderBoundary.js.map

@@ -1,0 +1,110 @@
+import { jsxDEV } from "react/jsx-dev-runtime";
+import { useEffect } from "react";
+import { cn, background } from "../../styles/theme.js";
+import { CloseSvg } from "../svg/closeSvg.js";
+import { getToastPosition } from "../utils/getToastPosition.js";
+const defaultAnimationByPosition = {
+  "top-center": "animate-enterDown",
+  "top-right": "animate-enterRight",
+  "bottom-center": "animate-enterUp",
+  "bottom-right": "animate-enterRight"
+};
+function Toast({
+  className,
+  durationMs = 5e3,
+  startTimeout = true,
+  position = "bottom-center",
+  animation,
+  isVisible,
+  onClose,
+  children
+}) {
+  const positionClass = getToastPosition(position);
+  const animationClass = animation ?? defaultAnimationByPosition[position];
+  useEffect(() => {
+    if (startTimeout) {
+      const timer = setTimeout(() => {
+        if (isVisible) {
+          onClose();
+        }
+      }, durationMs);
+      return () => {
+        if (timer) {
+          clearTimeout(timer);
+        }
+      };
+    }
+  }, [durationMs, isVisible, onClose, startTimeout]);
+  if (!isVisible) {
+    return null;
+  }
+  return /* @__PURE__ */ jsxDEV(
+    "div",
+    {
+      className: cn("-translate-x-2/4 fixed z-20", positionClass),
+      "data-testid": "ockToastContainer",
+      children: /* @__PURE__ */ jsxDEV(
+        "div",
+        {
+          className: cn(
+            background.default,
+            "flex items-center justify-between rounded-lg",
+            "p-2 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.12)]",
+            animationClass,
+            className
+          ),
+          "data-testid": "ockToast",
+          children: [
+            /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-4 p-2", children }, void 0, false, {
+              fileName: "/Users/MAC/Documents/Code/onchainkit-react/src/internal/components/Toast.tsx",
+              lineNumber: 72,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(
+              "button",
+              {
+                className: "p-2",
+                onClick: onClose,
+                type: "button",
+                "data-testid": "ockCloseButton",
+                children: /* @__PURE__ */ jsxDEV(CloseSvg, {}, void 0, false, {
+                  fileName: "/Users/MAC/Documents/Code/onchainkit-react/src/internal/components/Toast.tsx",
+                  lineNumber: 79,
+                  columnNumber: 11
+                }, this)
+              },
+              void 0,
+              false,
+              {
+                fileName: "/Users/MAC/Documents/Code/onchainkit-react/src/internal/components/Toast.tsx",
+                lineNumber: 73,
+                columnNumber: 9
+              },
+              this
+            )
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "/Users/MAC/Documents/Code/onchainkit-react/src/internal/components/Toast.tsx",
+          lineNumber: 62,
+          columnNumber: 7
+        },
+        this
+      )
+    },
+    void 0,
+    false,
+    {
+      fileName: "/Users/MAC/Documents/Code/onchainkit-react/src/internal/components/Toast.tsx",
+      lineNumber: 58,
+      columnNumber: 5
+    },
+    this
+  );
+}
+export {
+  Toast
+};
+//# sourceMappingURL=Toast.js.map

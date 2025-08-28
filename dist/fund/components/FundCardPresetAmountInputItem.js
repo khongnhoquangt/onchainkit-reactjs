@@ -1,0 +1,79 @@
+import { jsxDEV } from "react/jsx-dev-runtime";
+import { formatFiatAmount } from "../../internal/utils/formatFiatAmount.js";
+import { cn, border, color, text } from "../../styles/theme.js";
+import { useMemo, useCallback } from "react";
+import { useAnalytics } from "../../core/analytics/hooks/useAnalytics.js";
+import { FundEvent } from "../../core/analytics/types.js";
+function FundCardPresetAmountInputItem({
+  presetAmountInput,
+  currency,
+  onClick
+}) {
+  const { sendAnalytics } = useAnalytics();
+  const presetAmountInputText = useMemo(() => {
+    return formatFiatAmount({
+      amount: presetAmountInput,
+      currency,
+      minimumFractionDigits: 0
+    });
+  }, [presetAmountInput, currency]);
+  const handleClick = useCallback(() => {
+    sendAnalytics(FundEvent.FundAmountChanged, {
+      amount: Number(presetAmountInput),
+      currency
+    });
+    onClick(presetAmountInput);
+  }, [presetAmountInput, currency, onClick, sendAnalytics]);
+  const handleKeyPress = useCallback(
+    (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        sendAnalytics(FundEvent.FundAmountChanged, {
+          amount: Number(presetAmountInput),
+          currency
+        });
+        onClick(presetAmountInput);
+      }
+    },
+    [presetAmountInput, currency, onClick, sendAnalytics]
+  );
+  if (!presetAmountInput) {
+    return null;
+  }
+  return /* @__PURE__ */ jsxDEV(
+    "button",
+    {
+      type: "button",
+      "data-testid": "ockPresetAmountInput",
+      className: cn(
+        text.body,
+        color.foreground,
+        border.radius,
+        border.lineDefault,
+        "flex-1",
+        "p-1",
+        "overflow-hidden",
+        "whitespace-nowrap",
+        "text-ellipsis",
+        "hover:bg-[var(--ock-bg-default-hover)]",
+        "focus:outline-none focus:ring-2"
+      ),
+      title: presetAmountInputText,
+      onClick: handleClick,
+      onKeyDown: handleKeyPress,
+      children: presetAmountInputText
+    },
+    void 0,
+    false,
+    {
+      fileName: "/Users/MAC/Documents/Code/onchainkit-react/src/fund/components/FundCardPresetAmountInputItem.tsx",
+      lineNumber: 50,
+      columnNumber: 5
+    },
+    this
+  );
+}
+export {
+  FundCardPresetAmountInputItem
+};
+//# sourceMappingURL=FundCardPresetAmountInputItem.js.map
